@@ -1,18 +1,24 @@
 #!/usr/bin/python3
 
 import socket
-
 cnx = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-cnx.connect(("localhost", 7777))
 
-part = cnx.recv(1024).decode("UTF-8")
-print("Veuillez entrer le \"", part, "\" :", sep="", end=" ")
-phr = input()
-cnx.send(bytes(phr, "UTF-8"))
+def connect(hostname):
+	global cnx
+	cnx.connect((hostname, 7777))
 
-phr = cnx.recv(1024).decode("UTF-8")
-print("La phrase est : \"", phr, "\".", sep="")
+def getPart():
+	global cnx
+	return cnx.recv(1024).decode("UTF-8")
 
-cnx.close()
+def sendPart(string):
+	global cnx
+	cnx.send(bytes(string, "UTF-8"))
+
+def end():
+	global cnx
+	phr = cnx.recv(1024).decode("UTF-8")
+	cnx.close()
+	return phr
 
 
